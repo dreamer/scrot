@@ -321,15 +321,16 @@ scrot_sel_and_grab_image(void)
       /* get geometry of window and use that */
       /* get windowmanager frame of window */
       if (target != root) {
-        unsigned int d, x;
+        unsigned int d;
+        int x;
         int status;
 
         status = XGetGeometry(disp, target, &root, &x, &x, &d, &d, &d, &d);
         if (status != 0) {
           Window rt, *children, parent;
 
+          /* Find window manager frame. */
           for (;;) {
-            /* Find window manager frame. */
             status = XQueryTree(disp, target, &rt, &parent, &children, &d);
             if (status && (children != None))
               XFree((char *) children);
@@ -337,10 +338,14 @@ scrot_sel_and_grab_image(void)
               break;
             target = parent;
           }
+          if (opt.border)
+              target = scrot_get_net_frame_window(disp, target);
+
           /* Get client window. */
           if (!opt.border)
             target = scrot_get_client_window(disp, target);
           XRaiseWindow(disp, target);
+          XSetInputFocus(disp, target, RevertToParent, CurrentTime);
         }
       }
       stat = XGetWindowAttributes(disp, target, &attr);
@@ -518,6 +523,34 @@ scrot_get_client_window(Display * display,
   if (!client)
     return target;
   return client;
+}
+
+Window
+scrot_get_net_frame_window(Display * display,
+                           Window target)
+{
+  /* window's _NET_FRAME_WINDOW property       */
+  /* points to window decoration frame xid     */
+  /* it's useful for WMs, that do not reparent */
+  /* client window to decoration windows       */
+  /* (e.g. compiz <= 0.9)                      */
+  Atom net_frame;
+  Atom type = None;
+  int format, status;
+  unsigned char *data;
+  unsigned long after, items;
+  net_frame = XInternAtom(display, "_NET_FRAME_WINDOW", True);
+  if (None == net_frame)
+    return target;
+  status = XGetWindowProperty(display, target, net_frame, 0L, 1L, False,
+                         (Atom) AnyPropertyType, &type, &format,
+                         &items, &after, &data);
+  if (Success!=status || None==type || 32!=format || 1!=items)
+    return target;
+  target = *(Window*)data;
+  if (data)
+    XFree(data);
+  return target;
 }
 
 Window
