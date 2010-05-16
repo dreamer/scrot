@@ -181,7 +181,7 @@ scrot_sel_and_grab_image(void)
   int count = 0, done = 0;
   int rx = 0, ry = 0, rw = 0, rh = 0, btn_pressed = 0;
   int rect_x = 0, rect_y = 0, rect_w = 0, rect_h = 0;
-  Cursor cursor, cursor2;
+  Cursor cursor, cursor_nw, cursor_ne, cursor_se, cursor_sw;
   Window target = None;
   GC gc;
   XGCValues gcval;
@@ -189,8 +189,11 @@ scrot_sel_and_grab_image(void)
   xfd = ConnectionNumber(disp);
   fdsize = xfd + 1;
 
-  cursor = XCreateFontCursor(disp, XC_left_ptr);
-  cursor2 = XCreateFontCursor(disp, XC_lr_angle);
+  cursor    = XCreateFontCursor(disp, XC_crosshair);
+  cursor_nw = XCreateFontCursor(disp, XC_ul_angle);
+  cursor_ne = XCreateFontCursor(disp, XC_ur_angle);
+  cursor_se = XCreateFontCursor(disp, XC_lr_angle);
+  cursor_sw = XCreateFontCursor(disp, XC_ll_angle);
 
   gcval.foreground = XWhitePixel(disp, 0);
   gcval.function = GXxor;
@@ -214,7 +217,6 @@ scrot_sel_and_grab_image(void)
         CurrentTime) != GrabSuccess))
     gib_eprintf("couldn't grab keyboard:");
 
-
   while (1) {
     /* handle events here */
     while (!done && XPending(disp)) {
@@ -225,17 +227,30 @@ scrot_sel_and_grab_image(void)
             if (rect_w) {
               /* re-draw the last rect to clear it */
               XDrawRectangle(disp, root, gc, rect_x, rect_y, rect_w, rect_h);
-            } else {
-              /* Change the cursor to show we're selecting a region */
-              XChangeActivePointerGrab(disp,
-                                       ButtonMotionMask | ButtonReleaseMask,
-                                       cursor2, CurrentTime);
             }
 
             rect_x = rx;
             rect_y = ry;
             rect_w = ev.xmotion.x - rect_x;
             rect_h = ev.xmotion.y - rect_y;
+
+            /* Change the cursor to show we're selecting a region */
+            if (rect_w < 0 && rect_h < 0)
+              XChangeActivePointerGrab(disp,
+                                       ButtonMotionMask | ButtonReleaseMask,
+                                       cursor_nw, CurrentTime);
+            else if (rect_w < 0 && rect_h > 0)
+              XChangeActivePointerGrab(disp,
+                                       ButtonMotionMask | ButtonReleaseMask,
+                                       cursor_sw, CurrentTime);
+            else if (rect_w > 0 && rect_h < 0)
+              XChangeActivePointerGrab(disp,
+                                       ButtonMotionMask | ButtonReleaseMask,
+                                       cursor_ne, CurrentTime);
+            else if (rect_w > 0 && rect_h > 0)
+              XChangeActivePointerGrab(disp,
+                                       ButtonMotionMask | ButtonReleaseMask,
+                                       cursor_se, CurrentTime);
 
             if (rect_w < 0) {
               rect_x += rect_w;
