@@ -1,3 +1,4 @@
+/* vim: set expandtab ts=2 sw=2: */
 /* main.c
 
 Copyright (C) 1999,2000 Tom Gilbert.
@@ -359,6 +360,7 @@ scrot_sel_and_grab_image(void)
           /* Get client window. */
           if (!opt.border)
             target = scrot_get_client_window(disp, target);
+
           XRaiseWindow(disp, target);
           XSetInputFocus(disp, target, RevertToParent, CurrentTime);
         }
@@ -369,6 +371,14 @@ scrot_sel_and_grab_image(void)
       rw = attr.width;
       rh = attr.height;
       XTranslateCoordinates(disp, target, root, 0, 0, &rx, &ry, &child);
+
+      // additional border for shadows:
+      // FIXME apply only if grabbing transparent screenshot
+      // and not maximised nor fullscreen
+      rx -= 20;
+      ry -= 20;
+      rw += 40;
+      rh += 40;
     }
 
     /* clip rectangle nicely */
@@ -386,9 +396,84 @@ scrot_sel_and_grab_image(void)
       rh = scr->height - ry;
 
     XBell(disp, 0);
-    im = gib_imlib_create_image_from_drawable(root, 0, rx, ry, rw, rh, 1);
+    // im = gib_imlib_create_image_from_drawable(root, 0, rx, ry, rw, rh, 1);
+    im = scrot_grab_transparent_shot(disp, target, rx, ry, rw, rh);
   }
   return im;
+}
+
+Imlib_Image
+scrot_grab_transparent_shot(Display *dpy, 
+                            Window shot_target,
+                            int x,
+                            int y,
+                            int width,
+                            int height)
+{
+  Imlib_Image black_shot, white_shot;
+
+  // FIXME store target's sticky value
+
+  Window w = scrot_create_window(dpy, x, y, width, height);
+    XSetInputFocus(dpy, shot_target, RevertToParent, CurrentTime);
+    XFlush(dpy);
+    sleep(1); // FIXME wait 1s until WM will finish animations
+    white_shot = gib_imlib_create_image_from_drawable(root,
+    0, x, y, width, height, 1);
+
+  GC gc = XCreateGC(dpy, w, 0, 0);
+  XFillRectangle(dpy, w, gc, 0, 0, width, height);
+    XFlush(dpy);
+    sleep(1); // FIXME
+  black_shot = gib_imlib_create_image_from_drawable(root,
+    0, x, y, width, height, 1);
+
+  // restore sticky
+
+  return create_transparent_image(white_shot, black_shot);
+}
+
+Window
+scrot_create_window(Display *dpy, 
+                    int x,
+                    int y,
+                    int width,
+                    int height)
+{
+  Window w = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), x, y, 
+         width, height, 0, 
+         XBlackPixel(disp, 0),
+         XWhitePixel(disp, 0));
+  XSelectInput(dpy, w, StructureNotifyMask | ExposureMask );
+
+  struct {
+    unsigned long flags;
+    unsigned long functions;
+    unsigned long decorations;
+    long input_mode;
+    unsigned long status;
+  } hints = { 2, 1, 0, 0, 0 };
+
+  // TODO: skip taskbar
+  // _MOTIF_WM_HINTS is respected by most window managers
+  // but freedesktop intends to deprecate it
+  // replace with _NET_WM_WINDOW_TYPE_DESKTOP ?
+
+  XChangeProperty (dpy, w,
+    XInternAtom (dpy, "_MOTIF_WM_HINTS", False),
+    XInternAtom (dpy, "_MOTIF_WM_HINTS", False),
+    32, PropModeReplace,
+    (const unsigned char *) &hints,
+    sizeof (hints) / sizeof (long));
+
+  XMapWindow(dpy, w);
+  for(;;) {
+    XEvent e;
+    XNextEvent(dpy, &e);
+    if (e.type == MapNotify)
+      break;
+  }
+  return w;
 }
 
 Window
@@ -678,3 +763,32 @@ stalk_image_concat(gib_list * images)
   }
   return ret;
 }
+
+Imlib_Image
+create_transparent_image(Imlib_Image w_image, Imlib_Image b_image)
+{
+  int w, h;
+  DATA32 *dst_data, *src_data;
+  imlib_context_set_image(w_image);
+  dst_data = imlib_image_get_data();
+  imlib_context_set_image(b_image);
+  src_data = imlib_image_get_data();
+  h = gib_imlib_image_get_height(w_image);
+  w = gib_imlib_image_get_width(w_image);
+
+  unsigned long i;
+  for(i=0; i<w*h; i++)
+    if(dst_data[i] != src_data[i])
+    {
+      DATA32 alpha;
+      alpha = (src_data[i] & 0xff) - (dst_data[i] & 0xff);
+      alpha = (alpha << 24) & 0xff000000;
+      dst_data[i] = (src_data[i] & 0xffffff) | alpha;
+    }
+  Imlib_Image ret_img;
+  ret_img = imlib_create_image_using_data(w, h, dst_data);
+  imlib_context_set_image(ret_img);
+  imlib_image_set_has_alpha(1);
+  return ret_img;
+}
+

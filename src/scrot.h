@@ -72,7 +72,11 @@ void scrot_exec_app(Imlib_Image image, struct tm *tm,
                     char *filename_im, char *filename_thumb);
 void scrot_do_delay(void);
 Imlib_Image scrot_sel_and_grab_image(void);
+Imlib_Image scrot_grab_transparent_shot(Display *display, Window shot_target,
+                                        int x, int y, int width, int height);
 void scrot_sel_area(int *x, int *y, int *w, int *h);
+Window scrot_create_window(Display *display, int x, int y,
+                           int width, int height);
 Window scrot_get_window(Display *display, Window window, int x, int y);
 Window scrot_get_client_window(Display *display, Window target);
 Window scrot_get_net_frame_window(Display *display, Window target);
@@ -83,6 +87,8 @@ char *im_printf(char *str, struct tm *tm,
                 Imlib_Image im);
 Imlib_Image scrot_grab_shot_multi(void);
 Imlib_Image stalk_image_concat(gib_list *images);
+Imlib_Image create_transparent_image(Imlib_Image w_image,
+                                     Imlib_Image b_image);
 
 /* Imlib stuff */
 extern Display *disp;
