@@ -129,6 +129,12 @@ scrot_parse_option_array(int argc, char **argv)
          if (!opt.output_file)
          {
             opt.output_file = argv[optind++];
+
+            if ( strlen(opt.output_file) > 256 ) {
+               printf("output filename too long.\n");
+               exit(EXIT_FAILURE);
+            }
+
             if (opt.thumb)
                opt.thumb_file = name_thumbnail(opt.output_file);
          }
