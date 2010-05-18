@@ -1,0 +1,9 @@
+Makefile
+config.log
+config.status
+scrot.spec
+src/Makefile
+src/config.h
+src/*.o
+src/scrot
+src/stamp-h
