@@ -89,6 +89,7 @@ Imlib_Image scrot_grab_shot_multi(void);
 Imlib_Image stalk_image_concat(gib_list *images);
 Imlib_Image create_transparent_image(Imlib_Image w_image,
                                      Imlib_Image b_image);
+void window_set_skip_taskbar(Display *display, Window window);
 
 /* Imlib stuff */
 extern Display *disp;

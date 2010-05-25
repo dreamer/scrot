@@ -315,6 +315,9 @@ scrot_sel_and_grab_image(void)
 
   if (done < 2) {
     scrot_do_delay();
+
+    Window client_window = None;
+
     if (rect_w > 5) {
       /* if a rect has been drawn, it's an area selection */
       rw = ev.xbutton.x - rx;
@@ -354,12 +357,18 @@ scrot_sel_and_grab_image(void)
               break;
             target = parent;
           }
-          if (opt.border)
-              target = scrot_get_net_frame_window(disp, target);
-
+         
           /* Get client window. */
-          if (!opt.border)
+          if (opt.border)
+          {
+            client_window = target;
+            target = scrot_get_net_frame_window(disp, target);
+          }
+          else
+          {
             target = scrot_get_client_window(disp, target);
+            client_window = target;
+          }
 
           XRaiseWindow(disp, target);
           XSetInputFocus(disp, target, RevertToParent, CurrentTime);
@@ -397,14 +406,14 @@ scrot_sel_and_grab_image(void)
 
     XBell(disp, 0);
     // im = gib_imlib_create_image_from_drawable(root, 0, rx, ry, rw, rh, 1);
-    im = scrot_grab_transparent_shot(disp, target, rx, ry, rw, rh);
+    im = scrot_grab_transparent_shot(disp, client_window, rx, ry, rw, rh);
   }
   return im;
 }
 
 Imlib_Image
 scrot_grab_transparent_shot(Display *dpy, 
-                            Window shot_target,
+                            Window client_window,
                             int x,
                             int y,
                             int width,
@@ -412,23 +421,20 @@ scrot_grab_transparent_shot(Display *dpy,
 {
   Imlib_Image black_shot, white_shot;
 
-  // FIXME store target's sticky value
-
   Window w = scrot_create_window(dpy, x, y, width, height);
-    XSetInputFocus(dpy, shot_target, RevertToParent, CurrentTime);
-    XFlush(dpy);
-    sleep(1); // FIXME wait 1s until WM will finish animations
-    white_shot = gib_imlib_create_image_from_drawable(root,
-    0, x, y, width, height, 1);
+  XSetInputFocus(dpy, client_window, RevertToParent, CurrentTime);
+  XRaiseWindow(dpy, client_window);
+  XFlush(dpy);
+  sleep(1); // FIXME wait 1s until WM will finish animations
+  white_shot = gib_imlib_create_image_from_drawable(root,
+      0, x, y, width, height, 1);
 
   GC gc = XCreateGC(dpy, w, 0, 0);
   XFillRectangle(dpy, w, gc, 0, 0, width, height);
-    XFlush(dpy);
-    sleep(1); // FIXME
+  XFlush(dpy);
+  sleep(1); // FIXME
   black_shot = gib_imlib_create_image_from_drawable(root,
-    0, x, y, width, height, 1);
-
-  // restore sticky
+      0, x, y, width, height, 1);
 
   return create_transparent_image(white_shot, black_shot);
 }
@@ -454,17 +460,17 @@ scrot_create_window(Display *dpy,
     unsigned long status;
   } hints = { 2, 1, 0, 0, 0 };
 
-  // TODO: skip taskbar
   // _MOTIF_WM_HINTS is respected by most window managers
   // but freedesktop intends to deprecate it
   // replace with _NET_WM_WINDOW_TYPE_DESKTOP ?
-
   XChangeProperty (dpy, w,
     XInternAtom (dpy, "_MOTIF_WM_HINTS", False),
     XInternAtom (dpy, "_MOTIF_WM_HINTS", False),
     32, PropModeReplace,
     (const unsigned char *) &hints,
     sizeof (hints) / sizeof (long));
+
+  window_set_skip_taskbar(dpy, w);
 
   XMapWindow(dpy, w);
   for(;;) {
@@ -790,5 +796,22 @@ create_transparent_image(Imlib_Image w_image, Imlib_Image b_image)
   imlib_context_set_image(ret_img);
   imlib_image_set_has_alpha(1);
   return ret_img;
+}
+
+void
+window_set_skip_taskbar(Display *dpy, Window window)
+{
+  XEvent event;
+  event.xclient.type = ClientMessage;
+  event.xclient.display = dpy;
+  event.xclient.window = window;
+  event.xclient.message_type = XInternAtom(dpy, "_NET_WM_STATE", True);
+  event.xclient.format = 32;
+  event.xclient.data.l[0] = 1;
+  event.xclient.data.l[1] = XInternAtom(dpy, "_NET_WM_STATE_SKIP_TASKBAR", True);
+  event.xclient.data.l[2] = 0;
+  event.xclient.data.l[3] = 0;
+  event.xclient.data.l[4] = 0;
+  XSendEvent(dpy, 0, False, PropertyChangeMask , &event);
 }
 
