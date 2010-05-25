@@ -33,6 +33,7 @@ struct __scrotoptions
    int countdown;
    int select;
    int quality;
+   int alpha;
    int border;
    int multidisp;
    int thumb;

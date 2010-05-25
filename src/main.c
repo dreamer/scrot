@@ -384,10 +384,13 @@ scrot_sel_and_grab_image(void)
       // additional border for shadows:
       // FIXME apply only if grabbing transparent screenshot
       // and not maximised nor fullscreen
-      rx -= 20;
-      ry -= 20;
-      rw += 40;
-      rh += 40;
+      if(opt.alpha)
+      {
+        rx -= 20;
+        ry -= 20;
+        rw += 40;
+        rh += 40;
+      }
     }
 
     /* clip rectangle nicely */
@@ -405,8 +408,10 @@ scrot_sel_and_grab_image(void)
       rh = scr->height - ry;
 
     XBell(disp, 0);
-    // im = gib_imlib_create_image_from_drawable(root, 0, rx, ry, rw, rh, 1);
-    im = scrot_grab_transparent_shot(disp, client_window, rx, ry, rw, rh);
+    if(opt.alpha)
+      im = scrot_grab_transparent_shot(disp, client_window, rx, ry, rw, rh);
+    else
+      im = gib_imlib_create_image_from_drawable(root, 0, rx, ry, rw, rh, 1);
   }
   return im;
 }

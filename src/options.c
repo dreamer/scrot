@@ -1,3 +1,4 @@
+/* vim: set expandtab ts=2 sw=2: */
 /* options.c
 
 Copyright (C) 1999,2000 Tom Gilbert.
@@ -32,19 +33,20 @@ scrotoptions opt;
 void
 init_parse_options(int argc, char **argv)
 {
-   /* Set default options */
-   memset(&opt, 0, sizeof(scrotoptions));
+  /* Set default options */
+  memset(&opt, 0, sizeof(scrotoptions));
 
-   opt.quality = 75;
+  opt.quality = 75;
+  opt.border = 1;
 
-   /* Parse the cmdline args */
-   scrot_parse_option_array(argc, argv);
+  /* Parse the cmdline args */
+  scrot_parse_option_array(argc, argv);
 }
 
 static void
 scrot_parse_option_array(int argc, char **argv)
 {
-   static char stropts[] = "bcd:e:hmq:st:v+:";
+   static char stropts[] = "abcd:e:hmnq:st:v+:";
    static struct option lopts[] = {
       /* actions */
       {"help", 0, 0, 'h'},                  /* okay */
@@ -52,6 +54,8 @@ scrot_parse_option_array(int argc, char **argv)
       {"count", 0, 0, 'c'},
       {"select", 0, 0, 's'},
       {"border", 0, 0, 'b'},
+      {"no-border", 0, 0, 'n'},
+      {"alpha", 0, 0, 'a'},
       {"multidisp", 0, 0, 'm'},
       /* toggles */
       {"thumb", 1, 0, 't'},
@@ -77,9 +81,15 @@ scrot_parse_option_array(int argc, char **argv)
         case 'v':
            show_version();
            break;
+        case 'a':
+           opt.alpha = 1;
         case 'b':
            opt.border = 1;
            break;
+        case 'n':
+           opt.alpha = 0;
+           opt.border = 0;
+		       break;
         case 'd':
            opt.delay = atoi(optarg);
            break;
