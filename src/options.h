@@ -37,6 +37,7 @@ struct __scrotoptions
    int quality;
    int alpha;
    int border;
+   int silent;
    int multidisp;
    int thumb;
    int thumb_width;

@@ -46,7 +46,7 @@ init_parse_options(int argc, char **argv)
 static void
 scrot_parse_option_array(int argc, char **argv)
 {
-   static char stropts[] = "abcd:e:hmnqw:st:uv+:";
+   static char stropts[] = "abcd:e:hmnqw:st:uv+:z";
    static struct option lopts[] = {
       /* actions */
       {"help", 0, 0, 'h'},                  /* okay */
@@ -60,6 +60,7 @@ scrot_parse_option_array(int argc, char **argv)
       {"no-decorations", 0, 0, 'n'},
       {"alpha", 0, 0, 'a'},
       {"multidisp", 0, 0, 'm'},
+      {"silent", 0, 0, 'z'},
       /* toggles */
       {"window", 1, 0, 'w'},
       {"thumb", 1, 0, 't'},
@@ -124,6 +125,9 @@ scrot_parse_option_array(int argc, char **argv)
            break;
         case 't':
            options_parse_thumbnail(optarg);
+           break;
+        case 'z':
+           opt.silent = 1;
            break;
         default:
            break;
@@ -266,6 +270,7 @@ show_usage(void)
            "  -t, --thumb NUM           Generate thumbnail too. NUM is the percentage\n"
            "                            of the original size for the thumbnail to be,\n"
            "                            or the geometry in percent, e.g. 50x60 or 80x20.\n"
+           "  -z, --silent              Prevent beeping\n"
            "\n" "  SPECIAL STRINGS\n"
            "  Both the --exec and filename parameters can take format specifiers\n"
            "  that are expanded by " PACKAGE " when encountered.\n"

@@ -157,7 +157,9 @@ scrot_grab_shot(void)
 {
   Imlib_Image im;
 
-  XBell(disp, 0);
+  if (!opt.silent)
+    XBell(disp, 0);
+
   im =
     gib_imlib_create_image_from_drawable(root, 0, 0, 0, scr->width,
                                          scr->height, 1);
