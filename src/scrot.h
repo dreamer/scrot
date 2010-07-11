@@ -72,16 +72,21 @@ void scrot_exec_app(Imlib_Image image, struct tm *tm,
                     char *filename_im, char *filename_thumb);
 void scrot_do_delay(void);
 Imlib_Image scrot_sel_and_grab_image(void);
+Imlib_Image scrot_grab_focused(void);
+Imlib_Image scrot_grab_window(void);
+void scrot_sel_area(int *x, int *y, int *w, int *h);
+void scrot_nice_clip(int *rx, int *ry, int *rw, int *rh);
+int scrot_get_geometry(Window target, Window *client_window,
+                       int *rx, int *ry, int *rw, int *rh);
+Window scrot_get_window(Display *display,Window window,int x,int y);
+Window scrot_get_client_window(Display * display, Window target);
+Window scrot_find_window_by_property(Display * display, const Window window,
+                                     const Atom property);
 Imlib_Image scrot_grab_transparent_shot(Display *display, Window shot_target,
                                         int x, int y, int width, int height);
-void scrot_sel_area(int *x, int *y, int *w, int *h);
 Window scrot_create_window(Display *display, int x, int y,
                            int width, int height);
-Window scrot_get_window(Display *display, Window window, int x, int y);
-Window scrot_get_client_window(Display *display, Window target);
 Window scrot_get_net_frame_window(Display *display, Window target);
-Window scrot_find_window_by_property(Display *display, const Window window,
-                                     const Atom property);
 char *im_printf(char *str, struct tm *tm,
                 char *filename_im, char *filename_thumb,
                 Imlib_Image im);

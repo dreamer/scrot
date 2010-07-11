@@ -46,13 +46,16 @@ init_parse_options(int argc, char **argv)
 static void
 scrot_parse_option_array(int argc, char **argv)
 {
-   static char stropts[] = "abcd:e:hmnq:st:v+:";
+   static char stropts[] = "abcd:e:hmnq:st:uv+:";
    static struct option lopts[] = {
       /* actions */
       {"help", 0, 0, 'h'},                  /* okay */
       {"version", 0, 0, 'v'},               /* okay */
       {"count", 0, 0, 'c'},
       {"select", 0, 0, 's'},
+      {"focused", 0, 0, 'u'},
+      {"focussed", 0, 0, 'u'},	/* macquarie dictionary has both spellings */
+      {"window", 1, 0, 'w'},
       {"border", 0, 0, 'b'},
       {"no-border", 0, 0, 'n'},
       {"alpha", 0, 0, 'a'},
@@ -104,6 +107,12 @@ scrot_parse_option_array(int argc, char **argv)
            break;
         case 's':
            opt.select = 1;
+           break;
+        case 'u':
+           opt.focused = 1;
+           break;
+        case 'w':
+           opt.window = strtol(optarg, NULL, 0);
            break;
         case '+':
            opt.debug_level = atoi(optarg);
@@ -247,6 +256,8 @@ show_usage(void)
            "                            and join them together.\n"
            "  -s, --select              interactively choose a window or rectangle\n"
            "                            with the mouse\n"
+           "  -u, --focused             use the currently focused window\n"
+           "  -w, --window ID           use the window identified by ID\n"
            "  -t, --thumb NUM           generate thumbnail too. NUM is the percentage\n"
            "                            of the original size for the thumbnail to be,\n"
            "                            or the geometry in percent, e.g. 50x60 or 80x20.\n"

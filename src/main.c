@@ -49,7 +49,11 @@ main(int argc,
   }
 
 
-  if (opt.select)
+  if (opt.focused)
+    image = scrot_grab_focused();
+  else if (opt.window)
+    image = scrot_grab_window();
+  else if (opt.select)
     image = scrot_sel_and_grab_image();
   else {
     scrot_do_delay();
@@ -165,10 +169,48 @@ scrot_exec_app(Imlib_Image image, struct tm *tm,
                char *filename_im, char *filename_thumb)
 {
   char *execstr;
+  int status;
 
   execstr = im_printf(opt.exec, tm, filename_im, filename_thumb, image);
-  system(execstr);
-  exit(0);
+  status = system(execstr);
+  exit(WEXITSTATUS(status));
+}
+
+Imlib_Image
+scrot_grab_identified_window(Window target)
+{
+  Imlib_Image im = NULL;
+  int rx = 0, ry = 0, rw = 0, rh = 0;
+  Window client_window = None;
+
+  if (!scrot_get_geometry(target, &client_window, &rx, &ry, &rw, &rh))
+    return NULL;
+  scrot_nice_clip(&rx, &ry, &rw, &rh);
+  if(opt.alpha)
+    im = scrot_grab_transparent_shot(disp, client_window, rx, ry, rw, rh);
+  else
+    im = gib_imlib_create_image_from_drawable(root, 0, rx, ry, rw, rh, 1);
+  return im;
+}
+
+Imlib_Image
+scrot_grab_focused(void)
+{
+  Window target = None;
+  int ignored;
+
+  scrot_do_delay();
+  XGetInputFocus(disp, &target, &ignored);
+  return scrot_grab_identified_window(target);
+}
+
+Imlib_Image
+scrot_grab_window(void)
+{
+  Window target = opt.window;
+
+  scrot_do_delay();
+  return scrot_grab_identified_window(target);
 }
 
 Imlib_Image
@@ -332,80 +374,11 @@ scrot_sel_and_grab_image(void)
         rh = 0 - rh;
       }
     } else {
-      Window child;
-      XWindowAttributes attr;
-      int stat;
-
       /* else it's a window click */
-      /* get geometry of window and use that */
-      /* get windowmanager frame of window */
-      if (target != root) {
-        unsigned int d;
-        int x;
-        int status;
-
-        status = XGetGeometry(disp, target, &root, &x, &x, &d, &d, &d, &d);
-        if (status != 0) {
-          Window rt, *children, parent;
-
-          /* Find window manager frame. */
-          for (;;) {
-            status = XQueryTree(disp, target, &rt, &parent, &children, &d);
-            if (status && (children != None))
-              XFree((char *) children);
-            if (!status || (parent == None) || (parent == rt))
-              break;
-            target = parent;
-          }
-         
-          /* Get client window. */
-          if (opt.border)
-          {
-            client_window = target;
-            target = scrot_get_net_frame_window(disp, target);
-          }
-          else
-          {
-            target = scrot_get_client_window(disp, target);
-            client_window = target;
-          }
-
-          XRaiseWindow(disp, target);
-          XSetInputFocus(disp, target, RevertToParent, CurrentTime);
-        }
-      }
-      stat = XGetWindowAttributes(disp, target, &attr);
-      if ((stat == False) || (attr.map_state != IsViewable))
+      if (!scrot_get_geometry(target, &client_window, &rx, &ry, &rw, &rh))
         return NULL;
-      rw = attr.width;
-      rh = attr.height;
-      XTranslateCoordinates(disp, target, root, 0, 0, &rx, &ry, &child);
-
-      // additional border for shadows:
-      // FIXME apply only if grabbing transparent screenshot
-      // and not maximised nor fullscreen
-      if(opt.alpha)
-      {
-        rx -= 20;
-        ry -= 20;
-        rw += 40;
-        rh += 40;
-      }
     }
-
-    /* clip rectangle nicely */
-    if (rx < 0) {
-      rw += rx;
-      rx = 0;
-    }
-    if (ry < 0) {
-      rh += ry;
-      ry = 0;
-    }
-    if ((rx + rw) > scr->width)
-      rw = scr->width - rx;
-    if ((ry + rh) > scr->height)
-      rh = scr->height - ry;
+    scrot_nice_clip(&rx, &ry, &rw, &rh);
 
     XBell(disp, 0);
     if(opt.alpha)
@@ -415,6 +388,100 @@ scrot_sel_and_grab_image(void)
   }
   return im;
 }
+
+
+/* clip rectangle nicely */
+void
+scrot_nice_clip(int *rx, 
+		int *ry, 
+		int *rw, 
+		int *rh)
+{
+  if (*rx < 0) {
+    *rw += *rx;
+    *rx = 0;
+  }
+  if (*ry < 0) {
+    *rh += *ry;
+    *ry = 0;
+  }
+  if ((*rx + *rw) > scr->width)
+    *rw = scr->width - *rx;
+  if ((*ry + *rh) > scr->height)
+    *rh = scr->height - *ry;
+}
+
+
+/* get geometry of window and use that */
+int
+scrot_get_geometry(Window target,
+                   Window *client_window,
+                   int *rx, 
+                   int *ry, 
+                   int *rw, 
+                   int *rh)
+{
+  Window child;
+  XWindowAttributes attr;
+  int stat;
+
+  /* get windowmanager frame of window */
+  if (target != root) {
+    int x;
+    unsigned int d;
+    int status;
+    
+    status = XGetGeometry(disp, target, &root, &x, &x, &d, &d, &d, &d);
+    if (status != 0) {
+      Window rt, *children, parent;
+      
+      /* Find window manager frame. */
+      for (;;) {
+        status = XQueryTree(disp, target, &rt, &parent, &children, &d);
+        if (status && (children != None))
+          XFree((char *) children);
+        if (!status || (parent == None) || (parent == rt))
+          break;
+        target = parent;
+      }
+
+      /* Get client window. */
+      if (opt.border)
+      {
+        *client_window = target;
+        target = scrot_get_net_frame_window(disp, target);
+      }
+      else
+      {
+        target = scrot_get_client_window(disp, target);
+        *client_window = target;
+      }
+
+      XRaiseWindow(disp, target);
+      XSetInputFocus(disp, target, RevertToParent, CurrentTime);
+    }
+  }
+  stat = XGetWindowAttributes(disp, target, &attr);
+  if ((stat == False) || (attr.map_state != IsViewable))
+    return 0;
+  *rw = attr.width;
+  *rh = attr.height;
+  XTranslateCoordinates(disp, target, root, 0, 0, rx, ry, &child);
+
+  // additional border for shadows:
+  // FIXME apply only if grabbing transparent screenshot
+  // and not maximised nor fullscreen
+  if(opt.alpha)
+  {
+    *rx -= 20;
+    *ry -= 20;
+    *rw += 40;
+    *rh += 40;
+  }
+
+  return 1;
+}
+
 
 Imlib_Image
 scrot_grab_transparent_shot(Display *dpy, 
@@ -443,6 +510,7 @@ scrot_grab_transparent_shot(Display *dpy,
 
   return create_transparent_image(white_shot, black_shot);
 }
+
 
 Window
 scrot_create_window(Display *dpy, 
@@ -486,6 +554,7 @@ scrot_create_window(Display *dpy,
   }
   return w;
 }
+
 
 Window
 scrot_get_window(Display * display,
