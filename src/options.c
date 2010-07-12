@@ -46,7 +46,7 @@ init_parse_options(int argc, char **argv)
 static void
 scrot_parse_option_array(int argc, char **argv)
 {
-   static char stropts[] = "abcd:e:hmnq:st:uv+:";
+   static char stropts[] = "abcd:e:hmnqw:st:uv+:";
    static struct option lopts[] = {
       /* actions */
       {"help", 0, 0, 'h'},                  /* okay */
@@ -112,7 +112,7 @@ scrot_parse_option_array(int argc, char **argv)
            opt.focused = 1;
            break;
         case 'w':
-           opt.window = strtol(optarg, NULL, 0);
+           opt.window = strtol(optarg, NULL, 16);
            break;
         case '+':
            opt.debug_level = atoi(optarg);
