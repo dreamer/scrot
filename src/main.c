@@ -523,7 +523,7 @@ scrot_create_window(Display *dpy,
          width, height, 0, 
          XBlackPixel(disp, 0),
          XWhitePixel(disp, 0));
-  XSelectInput(dpy, w, StructureNotifyMask | ExposureMask );
+  XSelectInput(dpy, w, StructureNotifyMask /* | ExposureMask */ );
 
   struct {
     unsigned long flags;
@@ -542,10 +542,10 @@ scrot_create_window(Display *dpy,
     32, PropModeReplace,
     (const unsigned char *) &hints,
     sizeof (hints) / sizeof (long));
-
   window_set_skip_taskbar(dpy, w);
-
+ 
   XMapWindow(dpy, w);
+  XMoveWindow(dpy, w, x, y);
   for(;;) {
     XEvent e;
     XNextEvent(dpy, &e);
