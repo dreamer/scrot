@@ -494,6 +494,9 @@ scrot_grab_transparent_shot(Display *dpy,
   Imlib_Image black_shot, white_shot;
 
   Window w = scrot_create_window(dpy, x, y, width, height);
+  // FIXME compiz raises window as expected
+  // metacity have problems, looks like we need
+  // to set always-on-top flag temporarily for metacity
   XSetInputFocus(dpy, client_window, RevertToParent, CurrentTime);
   XRaiseWindow(dpy, client_window);
   XFlush(dpy);
@@ -875,6 +878,7 @@ create_transparent_image(Imlib_Image w_image, Imlib_Image b_image)
 void
 window_set_skip_taskbar(Display *dpy, Window window)
 {
+  // FIXME doesn't work in metacity
   XEvent event;
   event.xclient.type = ClientMessage;
   event.xclient.display = dpy;
