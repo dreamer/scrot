@@ -425,7 +425,8 @@ scrot_get_geometry(Window target,
   XWindowAttributes attr;
   int stat;
 
-  /* get windowmanager frame of window */
+  /* Get window manager frame and detect application window     */
+  /* from pointed window.                                       */
   if (target != root) {
     int x;
     unsigned int d;
@@ -435,7 +436,10 @@ scrot_get_geometry(Window target,
     if (status != 0) {
       Window rt, *children, parent;
       
-      /* Find window manager frame. */
+      /* Find toplevel window.                                  */
+      /* It will have coordinates of window, that we look for   */
+      /* But it may be completely different window (it depends  */
+      /* on window manager).                                    */
       for (;;) {
         status = XQueryTree(disp, target, &rt, &parent, &children, &d);
         if (status && (children != None))
@@ -448,7 +452,7 @@ scrot_get_geometry(Window target,
       /* Get client window. */
       if (opt.border)
       {
-        *client_window = target;
+        *client_window = scrot_get_client_window(disp, target);
         target = scrot_get_net_frame_window(disp, target);
       }
       else
@@ -494,13 +498,20 @@ scrot_grab_transparent_shot(Display *dpy,
   Imlib_Image black_shot, white_shot;
 
   Window w = scrot_create_window(dpy, x, y, width, height);
-  // FIXME compiz raises window as expected
-  // metacity have problems, looks like we need
-  // to set always-on-top flag temporarily for metacity
+  
   XSetInputFocus(dpy, client_window, RevertToParent, CurrentTime);
-  XRaiseWindow(dpy, client_window);
+
+  // compiz raises window as expected
+  // metacity have problems, so we need
+  // to set always-on-top flag temporarily for metacity
+  // FIXME 
+  //
+  // XRaiseWindow(dpy, client_window);
+  window_set_above(dpy, client_window, 1);
+
   XFlush(dpy);
-  sleep(1); // FIXME wait 1s until WM will finish animations
+  // wait 1s until WM will finish animations
+  sleep(1); // FIXME try to disable animations for this window
   white_shot = gib_imlib_create_image_from_drawable(root,
       0, x, y, width, height, 1);
 
@@ -510,6 +521,9 @@ scrot_grab_transparent_shot(Display *dpy,
   sleep(1); // FIXME
   black_shot = gib_imlib_create_image_from_drawable(root,
       0, x, y, width, height, 1);
+
+  window_set_above(dpy, client_window, 0);
+  XFlush(dpy);
 
   return create_transparent_image(white_shot, black_shot);
 }
@@ -526,7 +540,8 @@ scrot_create_window(Display *dpy,
          width, height, 0, 
          XBlackPixel(disp, 0),
          XWhitePixel(disp, 0));
-  XSelectInput(dpy, w, StructureNotifyMask /* | ExposureMask */ );
+  XSelectInput(dpy, w, PropertyChangeMask | StructureNotifyMask
+      | SubstructureRedirectMask | ConfigureRequest  /* | ExposureMask */ );
 
   struct {
     unsigned long flags;
@@ -545,6 +560,7 @@ scrot_create_window(Display *dpy,
     32, PropModeReplace,
     (const unsigned char *) &hints,
     sizeof (hints) / sizeof (long));
+
   window_set_skip_taskbar(dpy, w);
  
   XMapWindow(dpy, w);
@@ -847,6 +863,7 @@ stalk_image_concat(gib_list * images)
   return ret;
 }
 
+
 Imlib_Image
 create_transparent_image(Imlib_Image w_image, Imlib_Image b_image)
 {
@@ -875,10 +892,10 @@ create_transparent_image(Imlib_Image w_image, Imlib_Image b_image)
   return ret_img;
 }
 
+
 void
 window_set_skip_taskbar(Display *dpy, Window window)
 {
-  // FIXME doesn't work in metacity
   XEvent event;
   event.xclient.type = ClientMessage;
   event.xclient.display = dpy;
@@ -890,6 +907,26 @@ window_set_skip_taskbar(Display *dpy, Window window)
   event.xclient.data.l[2] = 0;
   event.xclient.data.l[3] = 0;
   event.xclient.data.l[4] = 0;
-  XSendEvent(dpy, 0, False, PropertyChangeMask , &event);
+
+  XSendEvent(dpy, DefaultRootWindow(disp), True, PropertyChangeMask, &event);
+}
+
+
+void
+window_set_above(Display *dpy, Window window, int enable)
+{
+  XEvent event;
+  event.xclient.type = ClientMessage;
+  event.xclient.display = dpy;
+  event.xclient.window = window;
+  event.xclient.message_type = XInternAtom(dpy, "_NET_WM_STATE", True);
+  event.xclient.format = 32;
+  event.xclient.data.l[0] = enable;
+  event.xclient.data.l[1] = XInternAtom(dpy, "_NET_WM_STATE_ABOVE", True);
+  event.xclient.data.l[2] = 0;
+  event.xclient.data.l[3] = 0;
+  event.xclient.data.l[4] = 0;
+
+  XSendEvent(dpy, DefaultRootWindow(disp), True, PropertyChangeMask, &event);
 }
 

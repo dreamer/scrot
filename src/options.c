@@ -55,12 +55,12 @@ scrot_parse_option_array(int argc, char **argv)
       {"select", 0, 0, 's'},
       {"focused", 0, 0, 'u'},
       {"focussed", 0, 0, 'u'},	/* macquarie dictionary has both spellings */
-      {"window", 1, 0, 'w'},
       {"border", 0, 0, 'b'},
       {"no-border", 0, 0, 'n'},
       {"alpha", 0, 0, 'a'},
       {"multidisp", 0, 0, 'm'},
       /* toggles */
+      {"window", 1, 0, 'w'},
       {"thumb", 1, 0, 't'},
       {"delay", 1, 0, 'd'},
       {"quality", 1, 0, 'q'},
