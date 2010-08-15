@@ -1,3 +1,15 @@
+Sun Aug 15 22:48:11 GMT 2010  Patryk Obara <patryk.obara@gmail.com>
+  * Anonymous patches from Debian: man fixes and -u, --focused
+    parameter to capture focused window.
+  * Changes from Michaël Witrant: code refactorization and -w, --window
+    parameter to capture window with specified id.
+  * -b, --border is now default with -s; now it works in compiz.
+  * -n, --no-border to trigger old behaviour.
+  * New parameter -a, --alpha to create semi-transparent shots
+    of selected windows; shot includes window shadows.
+  * Crash fix when -w was used with -t.
+  * Related help and man fixes.
+
 Wed Mar 12 13:20:11 GMT 2003  Tom Gilbert <tom@linuxbrit.co.uk>
 
   * Patch from Claes Nasten <pekdon@gmx.net>
