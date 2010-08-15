@@ -57,6 +57,7 @@ scrot_parse_option_array(int argc, char **argv)
       {"focussed", 0, 0, 'u'},	/* macquarie dictionary has both spellings */
       {"border", 0, 0, 'b'},
       {"no-border", 0, 0, 'n'},
+      {"no-decorations", 0, 0, 'n'},
       {"alpha", 0, 0, 'a'},
       {"multidisp", 0, 0, 'm'},
       /* toggles */
@@ -244,7 +245,6 @@ show_usage(void)
            "  current directory.\n" "  See man " PACKAGE " for more details\n"
            "  -h, --help                display this help and exit\n"
            "  -v, --version             output version information and exit\n"
-           "  -b, --border              When selecting a window, grab wm border too\n"
            "  -c, --count               show a countdown before taking the shot\n"
            "  -d, --delay NUM           wait NUM seconds before taking a shot\n"
            "  -e, --exec APP            run APP on the resulting screenshot\n"
@@ -256,6 +256,8 @@ show_usage(void)
            "                            and join them together.\n"
            "  -s, --select              interactively choose a window or rectangle\n"
            "                            with the mouse\n"
+           "  -n, --no-decorations      When selecting a window, don't grab\n"
+           "                            window decorations (border, titlebar, etc)\n"
            "  -u, --focused             use the currently focused window\n"
            "  -w, --window ID           use the window identified by ID\n"
            "  -t, --thumb NUM           generate thumbnail too. NUM is the percentage\n"
@@ -289,3 +291,4 @@ show_usage(void)
            "Email bugs to <scrot_sucks@linuxbrit.co.uk>\n");
    exit(0);
 }
+

@@ -20,9 +20,7 @@ display help output and exit.
 .TP 5
 .B -v, --version
 output version information and exit.
-.TP 5
-.B -b, --border
-When selecting a window, grab wm border too
+
 .TP 5
 .B -c, --count
 Display a countdown when used with delay.
@@ -42,6 +40,12 @@ For multiple heads, grab shot from each and join them together.
 .TP 5
 .B -s, --select
 Interactively select a window or rectangle with the mouse.
+.TP 5
+.B -n, --no-decorations, --no-border
+When selecting a window, don't grab window decorations (border, titlebar, etc).
+.TP 5
+.B -b, --border
+When selecting a window, grab wm border too. It's enabled by default with -s. 
 .TP 5
 .B -u, --focused
 Use the currently focused window.
