@@ -1,3 +1,5 @@
+CI Build Status: https://travis-ci.org/dreamer/scrot
+
 Compile:
 
 $ ./configure

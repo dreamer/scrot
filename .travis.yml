@@ -1,0 +1,23 @@
+---
+# http://docs.travis-ci.com/user/migrating-from-legacy/
+sudo: false
+
+language: c
+
+branches: [master, develop]
+
+os:
+- linux
+#- osx
+
+addons:
+  apt:
+    packages:
+    - giblib-dev
+
+compiler:
+- clang
+- gcc
+
+script:
+- ./configure && make
