@@ -775,8 +775,11 @@ scrot_find_window_by_property(Display * display,
                          &number_items, &after, &data);
     if (data)
       XFree(data);
-    if ((status == Success) && (type != (Atom) NULL))
-      child = children[i];
+    if ((status == Success) && (type != (Atom) NULL)) {
+      if (children) {
+          child = children[i];
+      }
+    }
   }
   for (i = 0; (i < number_children) && (child == None); i++)
     child = scrot_find_window_by_property(display, children[i], property);
