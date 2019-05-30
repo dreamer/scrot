@@ -129,6 +129,8 @@ scrot_parse_option_array(int argc, char **argv)
         case 'z':
            opt.silent = 1;
            break;
+        case '?':
+           exit(EXIT_FAILURE);
         default:
            break;
       }
