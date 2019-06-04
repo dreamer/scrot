@@ -35,12 +35,15 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <X11/keysym.h>
 #include <X11/Xresource.h>
 #include <X11/cursorfont.h>
+#include <X11/extensions/Xfixes.h>
+#include <X11/Xcursor/Xcursor.h>
 
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <ctype.h>
+#include <stdint.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/time.h>
@@ -94,6 +97,9 @@ Imlib_Image create_transparent_image(Imlib_Image w_image,
                                      Imlib_Image b_image);
 void window_set_skip_taskbar(Display *display, Window window);
 void window_set_above(Display *display, Window window, int enable);
+
+void scrot_grab_mouse_pointer(const Imlib_Image image,
+		const int ix_off, const int iy_off);
 
 /* Imlib stuff */
 extern Display *disp;

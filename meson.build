@@ -30,6 +30,7 @@ scrot_src = files(
 
 imlib2_dep = dependency('imlib2')
 x11_dep = dependency('x11')
+xfixes_dep = dependency('xfixes')
 
 giblib = static_library('giblib', giblib_src,
                         include_directories : '.',
@@ -38,7 +39,7 @@ giblib = static_library('giblib', giblib_src,
 giblib_dep = declare_dependency(link_with : giblib)
 
 executable('scrot', scrot_src,
-           dependencies : [giblib_dep, x11_dep],
+           dependencies : [giblib_dep, x11_dep, xfixes_dep],
            include_directories : '.',
            install : true)
 

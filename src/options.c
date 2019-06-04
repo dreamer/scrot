@@ -46,7 +46,7 @@ init_parse_options(int argc, char **argv)
 static void
 scrot_parse_option_array(int argc, char **argv)
 {
-   static char stropts[] = "abcd:e:hmnqw:st:uv+:z";
+   static char stropts[] = "apbcd:e:hmnqw:st:uv+:z";
    static struct option lopts[] = {
       /* actions */
       {"help", 0, 0, 'h'},                  /* okay */
@@ -61,6 +61,7 @@ scrot_parse_option_array(int argc, char **argv)
       {"alpha", 0, 0, 'a'},
       {"multidisp", 0, 0, 'm'},
       {"silent", 0, 0, 'z'},
+      {"pointer", 0, 0, 'p'},
       /* toggles */
       {"window", 1, 0, 'w'},
       {"thumb", 1, 0, 't'},
@@ -128,6 +129,9 @@ scrot_parse_option_array(int argc, char **argv)
            break;
         case 'z':
            opt.silent = 1;
+           break;
+        case 'p':
+           opt.pointer = 1;
            break;
         case '?':
            exit(EXIT_FAILURE);
@@ -274,6 +278,7 @@ show_usage(void)
            "                            Alternatively, exact thumbnail size in pixels\n"
            "                            can be specified, e.g. 1024x768.\n"
            "  -z, --silent              Prevent beeping\n"
+           "  -p, --pointer             Capture the mouse pointer.\n"
            "\n" "  SPECIAL STRINGS\n"
            "  Both the --exec and filename parameters can take format specifiers\n"
            "  that are expanded by " PACKAGE " when encountered.\n"

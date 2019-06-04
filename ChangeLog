@@ -1,6 +1,7 @@
 ## Unreleased
 
 - Add -z, --silent option for beep prevention (old Debian patch)
+- Add -p, --pointer option for capturing the mouse pointer
 - Fix segfault when using $t special string in the filename
 - Use .png extension when no file extension is passed
 
