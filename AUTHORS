@@ -1,12 +1,15 @@
 Original author of scrot and giblib:
-Tom Gilbert (giblet) <gilbertt@linuxbrit.co.uk>
 
-Significant parts of giblib were written by:
-Paul Duncan
+  Tom Gilbert <tom@linuxbrit.co.uk>
 
 Current maintainer of this version:
-Patryk Obara <dreamer.tan@gmail.com>
 
-Other contributors:
+  Patryk Obara <dreamer.tan@gmail.com>
 
-Daniel Lublin <daniel@lublin.se>
+Contributors and patch authors:
+
+  Artem Buslov <buslov.artem@gmail.com>
+  Daniel Lublin <daniel@lublin.se>
+  Ibragimov Rinat <ibragimovrinat@mail.ru>
+  Michaël Witrant <mike@lepton.fr>
+  Paul Duncan
