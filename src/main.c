@@ -872,6 +872,7 @@ create_transparent_image(Imlib_Image w_image, Imlib_Image b_image)
 {
   int w, h;
   DATA32 *dst_data, *src_data;
+
   imlib_context_set_image(w_image);
   dst_data = imlib_image_get_data();
   imlib_context_set_image(b_image);
@@ -880,7 +881,8 @@ create_transparent_image(Imlib_Image w_image, Imlib_Image b_image)
   w = gib_imlib_image_get_width(w_image);
 
   unsigned long i;
-  for(i=0; i<w*h; i++)
+  const unsigned long wh = (unsigned long)w * (unsigned long)h;
+  for (i = 0; i < wh; i++)
     if(dst_data[i] != src_data[i])
     {
       DATA32 alpha;

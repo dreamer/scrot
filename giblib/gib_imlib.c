@@ -444,6 +444,8 @@ gib_imlib_blend_image_onto_image_with_rotation(Imlib_Image dest_image,
                                                double angle, char dither,
                                                char blend, char alias)
 {
+   (void)dw;
+   (void)dh;
    imlib_context_set_image(dest_image);
    imlib_context_set_anti_alias(alias);
    imlib_context_set_dither(dither);
@@ -452,9 +454,6 @@ gib_imlib_blend_image_onto_image_with_rotation(Imlib_Image dest_image,
    imlib_blend_image_onto_image_at_angle(source_image, merge_alpha, sx, sy,
                                          sw, sh, dx, dy, (int) angle,
                                          (int) angle);
-   return;
-   dw = 0;
-   dh = 0;
 }
 
 Imlib_Image gib_imlib_create_cropped_scaled_image(Imlib_Image im, int sx,

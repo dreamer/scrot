@@ -87,6 +87,7 @@ scrot_parse_option_array(int argc, char **argv)
            break;
         case 'a':
            opt.alpha = 1;
+           /* fallthrough */
         case 'b':
            opt.border = 1;
            break;
