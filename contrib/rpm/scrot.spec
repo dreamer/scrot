@@ -8,7 +8,7 @@ Name: %name
 Summary:    Screen-shot capture using Imlib 2
 Version: 	%ver
 Release: 	%rel
-Copyright: 	BSD
+License:        MIT
 Group:		Applications/Graphics
 Source: 	%{name}-%{ver}.tar.gz
 Url: 		http://www.linuxbrit.co.uk
