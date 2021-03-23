@@ -1,0 +1,20 @@
+extraction:
+  cpp:
+    prepare:
+      packages:
+      - "meson"
+      - "libimlib2-dev"
+      - "libx11-dev"
+      - "libxfixes-dev"
+    configure:
+      command:
+      - meson setup build
+    index:
+      build_command:
+        - ninja -C build
+  python:
+    python_setup:
+      version: 3
+
+queries:
+  - exclude: cpp/short-global-name
