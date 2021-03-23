@@ -1,5 +1,22 @@
-Compile:
+scrot - capture a screenshot
+
+Read the man page to learn how to use this utility.
+
+Dependencies:
+
+Fedora:
+
+  $ sudo dnf install meson imlib2-devel libX11-devel
+
+Debian, Ubuntu:
+
+  $ sudo apt install meson libimlib2-dev libx11-dev
+
+Build instructions:
 
   $ meson setup build
   $ ninja -C build
   $ ninja -C build install
+
+This utility works in X11-based environments only - it does not work inside
+Wayland or XWayland sessions.
