@@ -1,5 +1,5 @@
 project('scrot', 'c',
-        version : '0.8.0',
+        version : '0.9.0',
         license : 'MIT-feh',
         default_options : ['b_ndebug=if-release'],
         meson_version : '>= 0.49.0')
