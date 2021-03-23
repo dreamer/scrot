@@ -2,7 +2,7 @@ project('scrot', 'c',
         version : '0.8.0',
         license : 'MIT-feh',
         default_options : ['b_ndebug=if-release'],
-        meson_version : '>= 0.51.0')
+        meson_version : '>= 0.49.0')
 
 configure_file(output : 'config.h',
   configuration : {
