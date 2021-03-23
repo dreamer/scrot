@@ -26,8 +26,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef DDEBUG_H
 #define DDEBUG_H
 
-#include <giblib/giblib_config.h>
-
 #ifdef WITH_DMALLOC
 #include <dmalloc.h>
 #define gib_emalloc(a) malloc(a)

@@ -26,7 +26,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef GIB_LIST_H
 #define GIB_LIST_H
 
-#include <giblib/giblib_config.h>
 #include <stdarg.h>
 
 #define GIB_LIST(a) ((gib_list*)a)

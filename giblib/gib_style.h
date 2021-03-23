@@ -28,7 +28,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define GIB_STYLE_H
 
 #include <giblib/gib_list.h>
-#include <giblib/giblib_config.h>
 
 #define GIB_STYLE(O) ((gib_style *)O)
 #define GIB_STYLE_BIT(O) ((gib_style_bit *)O)

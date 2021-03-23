@@ -27,7 +27,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef _GIB_QUEUE_H_
 #define _GIB_QUEUE_H_
 
-#include <giblib/giblib_config.h>
 #include <giblib/gib_list.h>
 
 #define GIB_QUEUE(a) ((gib_queue*)a)

@@ -26,8 +26,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef _GIB_BTREE_H
 #define _GIB_BTREE_H
 
-#include <giblib/giblib_config.h>
-
 #define GIB_BTREE(a) ((gib_btree*)a)
 
 typedef struct __gib_btree gib_btree;

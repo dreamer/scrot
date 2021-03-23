@@ -27,7 +27,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef GIB_HASH_H
 #define GIB_HASH_H
 
-#include <giblib/giblib_config.h>
 #include <giblib/gib_list.h>
 
 #define GIB_HASH(a) ((gib_hash*)a)

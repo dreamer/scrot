@@ -27,7 +27,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef _GIB_STACK_H_
 #define _GIB_STACK_H_
 
-#include <giblib/giblib_config.h>
 #include <giblib/gib_list.h>
 
 #define GIB_STACK(a) ((gib_stack*)a)
