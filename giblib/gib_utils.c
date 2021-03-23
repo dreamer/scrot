@@ -85,7 +85,7 @@ _gib_emalloc(size_t n)
 
    p = malloc(n);
    if (p == NULL)
-      gib_eprintf("malloc of %u bytes failed:", n);
+      gib_eprintf("malloc of %zu bytes failed:", n);
    return p;
 }
 
@@ -97,7 +97,7 @@ _gib_erealloc(void *ptr, size_t n)
 
    p = realloc(ptr, n);
    if (p == NULL)
-      gib_eprintf("realloc of %p by %u bytes failed:", ptr, n);
+      gib_eprintf("realloc of %p by %zu bytes failed:", ptr, n);
    return p;
 }
 
