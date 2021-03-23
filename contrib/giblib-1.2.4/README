@@ -1,1 +1,7 @@
+This directory contains the files files from giblib-1.2.4 that weren't
+merged with scrot source code and might still be useful in the future.
 
+If you want to obtain full sources for giblib-1.2.4, then either:
+
+- checkout commit: 25cf7cea7b7b71154b72408647b3579f860b2f12
+- download: https://web.archive.org/web/20060716084917/http://linuxbrit.co.uk/downloads/giblib-1.2.4.tar.gz
