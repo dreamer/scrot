@@ -26,6 +26,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef SCROT_H
 #define SCROT_H
 
+#include "config.h"
+
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
@@ -48,13 +50,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <time.h>
 #include <signal.h>
 #include <sys/wait.h>
-#include <giblib/giblib.h>
+#include <getopt.h>
 
-
-#include "config.h"
 #include "structs.h"
-#include "getopt.h"
 #include "debug.h"
+#include "giblib/giblib.h"
 
 #ifndef __GNUC__
 # define __attribute__(x)

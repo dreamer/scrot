@@ -23,8 +23,6 @@ giblib_src = files(
 )
 
 scrot_src = files(
-  'src/getopt1.c',
-  'src/getopt.c',
   'src/imlib.c',
   'src/main.c',
   'src/options.c',
