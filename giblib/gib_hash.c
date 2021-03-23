@@ -23,6 +23,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
+#include <strings.h>
+
 #include "gib_hash.h"
 #include "gib_utils.h"
 #include "gib_debug.h"
