@@ -1,3 +1,9 @@
+## Unreleased
+
+- Add -z, --silent option for beep prevention (old Debian patch)
+- Fix segfault when using $t special string in the filename
+- Use .png extension when no file extension is passed
+
 Tue 23 Mar 04:26:49 CET 2021  Patryk Obara <dreamer.tan@gmail.com>
   * Bundle giblib to make it easier to build the program.
   * Rewrite buildsystem in Meson, as it's much easier to maintain.
