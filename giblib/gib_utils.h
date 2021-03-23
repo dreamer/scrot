@@ -38,8 +38,8 @@ extern "C"
 {
 #endif
 
-void gib_eprintf(char *fmt, ...);
-void gib_weprintf(char *fmt, ...);
+void gib_eprintf(char *fmt, ...) __attribute__((__format__(__printf__, 1, 2)));
+void gib_weprintf(char *fmt, ...) __attribute__((__format__(__printf__, 1, 2)));
 char *_gib_estrdup(char *s);
 void *_gib_emalloc(size_t n);
 void _gib_efree(void *p);
