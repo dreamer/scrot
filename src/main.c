@@ -171,14 +171,15 @@ scrot_grab_mouse_pointer(const Imlib_Image image,
   const int height      = xcim->height;
   const int x           = (xcim->x - xcim->xhot) - ix_off;
   const int y           = (xcim->y - xcim->yhot) - iy_off;
+  const size_t n        = (size_t) width * height;
   DATA32 *pixels        = NULL;
 
 #ifdef __i386__
   pixels = xcim->pixels;
 #else
-  DATA32 data[width * height * 4];
+  DATA32 data[n * 4];
 
-  for (size_t i = 0; i < (width * height); i++)
+  for (size_t i = 0; i < n; i++)
     ((DATA32*)data)[i] = (DATA32)xcim->pixels[i];
 
   pixels = data;
