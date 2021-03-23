@@ -1,8 +1,10 @@
 project('scrot', 'c',
         version : '0.9.0',
         license : 'MIT-feh',
-        default_options : ['c_std=c99', 'b_ndebug=if-release'],
+        default_options : ['c_std=c11', 'b_ndebug=if-release'],
         meson_version : '>= 0.49.0')
+
+add_global_arguments('-D_POSIX_C_SOURCE=200809L', language : 'c')
 
 configure_file(output : 'config.h',
   configuration : {

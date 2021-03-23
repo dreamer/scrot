@@ -39,7 +39,7 @@ main(int argc,
   char *have_extension = NULL;
 
   time_t t;
-  struct tm *tm;
+  struct tm *tm = NULL;
 
   init_parse_options(argc, argv);
 
@@ -73,7 +73,7 @@ main(int argc,
     gib_eprintf("no image grabbed");
 
   time(&t); /* Get the time directly after the screenshot */
-  tm = localtime(&t);
+  tm = localtime_r(&t, tm);
 
   imlib_context_set_image(image);
   imlib_image_attach_data_value("quality", NULL, opt.quality, NULL);
