@@ -1,2 +1,14 @@
-# my usual Meson build dir
+# common names for meson build dir
 build
+builddir
+
+# common temporary or backup files
+*~
+*.swp
+*.tmp
+*.orig
+*.rej
+
+# clangd language server
+.clangd
+.cache
