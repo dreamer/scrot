@@ -46,6 +46,8 @@ struct __scrotoptions
    char *exec;
 };
 
+typedef struct __scrotoptions scrotoptions;
+
 void init_parse_options(int argc, char **argv);
 char *name_thumbnail(char *name);
 void options_parse_thumbnail(char *optarg);
