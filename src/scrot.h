@@ -28,32 +28,33 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "config.h"
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xatom.h>
-#include <X11/Xos.h>
-#include <X11/keysym.h>
-#include <X11/Xresource.h>
+#include <ctype.h>
+#include <dirent.h>
+#include <errno.h>
+#include <getopt.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <time.h>
+#include <unistd.h>
+
 #include <X11/cursorfont.h>
 #include <X11/extensions/Xfixes.h>
+#include <X11/keysym.h>
+#include <X11/Xatom.h>
 #include <X11/Xcursor/Xcursor.h>
-
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <ctype.h>
-#include <stdint.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <sys/time.h>
-#include <errno.h>
-#include <dirent.h>
-#include <stdarg.h>
-#include <time.h>
-#include <signal.h>
-#include <sys/wait.h>
-#include <getopt.h>
+#include <X11/Xlib.h>
+#include <X11/Xos.h>
+#include <X11/Xresource.h>
+#include <X11/Xutil.h>
 
 #include "giblib/giblib.h"
 
