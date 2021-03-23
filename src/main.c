@@ -536,7 +536,7 @@ scrot_get_geometry(Window target,
   XTranslateCoordinates(disp, target, root, 0, 0, rx, ry, &child);
 
   // additional border for shadows:
-  // FIXME apply only if grabbing transparent screenshot
+  // apply only if grabbing transparent screenshot
   // and not maximised nor fullscreen
   if(opt.alpha)
   {
@@ -567,21 +567,20 @@ scrot_grab_transparent_shot(Display *dpy,
   // compiz raises window as expected
   // metacity have problems, so we need
   // to set always-on-top flag temporarily for metacity
-  // FIXME 
   //
   // XRaiseWindow(dpy, client_window);
   window_set_above(dpy, client_window, 1);
 
   XFlush(dpy);
   // wait 1s until WM will finish animations
-  sleep(1); // FIXME try to disable animations for this window
+  sleep(1);
   white_shot = gib_imlib_create_image_from_drawable(root,
       0, x, y, width, height, 1);
 
   GC gc = XCreateGC(dpy, w, 0, 0);
   XFillRectangle(dpy, w, gc, 0, 0, width, height);
   XFlush(dpy);
-  sleep(1); // FIXME
+  sleep(1);
   black_shot = gib_imlib_create_image_from_drawable(root,
       0, x, y, width, height, 1);
 
