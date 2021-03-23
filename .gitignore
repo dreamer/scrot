@@ -7,3 +7,6 @@ src/config.h
 src/*.o
 src/scrot
 src/stamp-h
+
+# my usual Meson build dir
+build
