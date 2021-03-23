@@ -9,6 +9,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: sudo apt-get update
-      - run: sudo apt-get install -y meson libimlib2-dev
+      - run: sudo apt-get install -y meson libimlib2-dev libxfixes-dev
       - run: meson setup -Dwarning_level=3 build
       - run: ninja -C build

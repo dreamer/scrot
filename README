@@ -6,11 +6,11 @@ Dependencies:
 
 Fedora:
 
-  $ sudo dnf install meson imlib2-devel libX11-devel
+  $ sudo dnf install meson imlib2-devel libX11-devel libXfixes-devel
 
 Debian, Ubuntu:
 
-  $ sudo apt install meson libimlib2-dev libx11-dev
+  $ sudo apt install meson libimlib2-dev libx11-dev libxfixes-dev
 
 Build instructions:
 
