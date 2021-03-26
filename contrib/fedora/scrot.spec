@@ -2,7 +2,7 @@ Name:    scrot
 Version: 0.9.0
 Release: 1%{?dist}
 Summary: Simple command-line screenshot utility for X
-License: MIT
+License: MIT-feh
 Url:     https://github.com/dreamer/scrot/
 Source:  https://github.com/dreamer/scrot/archive/v%{version}/%{name}-%{version}.tar.gz
 
