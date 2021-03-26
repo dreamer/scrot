@@ -27,30 +27,31 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "options.h"
 
 Display *disp = NULL;
-Visual *vis = NULL;
+Visual *visual = NULL;
 Screen *screen = NULL;
-Colormap cm;
+Colormap colormap;
 int depth;
 Window root = 0;
 
 void init_x_and_imlib(char *dispstr, int screen_num)
 {
-	disp = XOpenDisplay(dispstr);
+	int screen_idx;
 
+	disp = XOpenDisplay(dispstr);
 	if (!disp)
 		gib_eprintf("Can't open X display. It *is* running, yeah?");
 
 	screen_num = (screen_num ? screen_num : DefaultScreen(disp));
-	screen = ScreenOfDisplay(disp, screen_num);
-
-	vis = DefaultVisual(disp, XScreenNumberOfScreen(screen));
-	depth = DefaultDepth(disp, XScreenNumberOfScreen(screen));
-	cm = DefaultColormap(disp, XScreenNumberOfScreen(screen));
-	root = RootWindow(disp, XScreenNumberOfScreen(screen));
+	screen     = ScreenOfDisplay(disp, screen_num);
+	screen_idx = XScreenNumberOfScreen(screen);
+	visual     = DefaultVisual(disp, screen_idx);
+	depth      = DefaultDepth(disp, screen_idx);
+	colormap   = DefaultColormap(disp, screen_idx);
+	root       = RootWindow(disp, screen_idx);
 
 	imlib_context_set_display(disp);
-	imlib_context_set_visual(vis);
-	imlib_context_set_colormap(cm);
+	imlib_context_set_visual(visual);
+	imlib_context_set_colormap(colormap);
 	imlib_context_set_color_modifier(NULL);
 	imlib_context_set_operation(IMLIB_OP_COPY);
 }

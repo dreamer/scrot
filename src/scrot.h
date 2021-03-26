@@ -103,8 +103,8 @@ void scrot_grab_mouse_pointer(const Imlib_Image image,
 
 /* Imlib stuff */
 extern Display *disp;
-extern Visual *vis;
-extern Colormap cm;
+extern Visual *visual;
+extern Colormap colormap;
 extern int depth;
 
 /* Thumbnail sizes */
