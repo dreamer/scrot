@@ -1,4 +1,3 @@
-/* vim: set expandtab ts=2 sw=2: */
 /* options.c
 
 Copyright (C) 1999,2000 Tom Gilbert.
