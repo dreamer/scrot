@@ -203,6 +203,13 @@ scrot_grab_mouse_pointer(const Imlib_Image image,
   imlib_free_image();
 }
 
+static Imlib_Image create_image_from_screen(void)
+{
+  const int w = screen->width;
+  const int h = screen->height;
+  return gib_imlib_create_image_from_drawable(root, 0, 0, 0, w, h, 1);
+}
+
 Imlib_Image
 scrot_grab_shot(void)
 {
@@ -211,8 +218,7 @@ scrot_grab_shot(void)
   if (!opt.silent)
     XBell(disp, 0);
 
-  im = gib_imlib_create_image_from_drawable(root, 0, 0, 0, scr->width,
-                                            scr->height, 1);
+  im = create_image_from_screen();
   if (opt.pointer == 1)
     scrot_grab_mouse_pointer(im, 0, 0);
 
@@ -244,7 +250,7 @@ scrot_grab_identified_window(Window target)
   if(opt.alpha)
     im = scrot_grab_transparent_shot(disp, client_window, rx, ry, rw, rh);
   else
-    im = gib_imlib_create_image_from_drawable(root, 0, rx, ry, rw, rh, 1);
+    im = create_image_from_screen();
 
   if (opt.pointer == 1)
     scrot_grab_mouse_pointer(im, rx, ry);
@@ -469,10 +475,10 @@ scrot_nice_clip(int *rx,
     *rh += *ry;
     *ry = 0;
   }
-  if ((*rx + *rw) > scr->width)
-    *rw = scr->width - *rx;
-  if ((*ry + *rh) > scr->height)
-    *rh = scr->height - *ry;
+  if ((*rx + *rw) > screen->width)
+    *rw = screen->width - *rx;
+  if ((*ry + *rh) > screen->height)
+    *rh = screen->height - *ry;
 }
 
 
@@ -881,9 +887,8 @@ scrot_grab_shot_multi(void)
     }
     snprintf(newdisp, sizeof(newdisp), "%s.%d", subdisp, i);
     init_x_and_imlib(newdisp, i);
-    ret =
-      gib_imlib_create_image_from_drawable(root, 0, 0, 0, scr->width,
-                                           scr->height, 1);
+
+    ret = create_image_from_screen();
     images = gib_list_add_end(images, ret);
   }
   free(subdisp);

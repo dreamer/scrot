@@ -28,30 +28,29 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Display *disp = NULL;
 Visual *vis = NULL;
-Screen *scr = NULL;
+Screen *screen = NULL;
 Colormap cm;
 int depth;
 Window root = 0;
 
-void
-init_x_and_imlib(char *dispstr, int screen_num)
+void init_x_and_imlib(char *dispstr, int screen_num)
 {
-   disp = XOpenDisplay(dispstr);
-   if (!disp)
-      gib_eprintf("Can't open X display. It *is* running, yeah?");
-   if (screen_num)
-      scr = ScreenOfDisplay(disp, screen_num);
-   else
-      scr = ScreenOfDisplay(disp, DefaultScreen(disp));
+	disp = XOpenDisplay(dispstr);
 
-   vis = DefaultVisual(disp, XScreenNumberOfScreen(scr));
-   depth = DefaultDepth(disp, XScreenNumberOfScreen(scr));
-   cm = DefaultColormap(disp, XScreenNumberOfScreen(scr));
-   root = RootWindow(disp, XScreenNumberOfScreen(scr));
+	if (!disp)
+		gib_eprintf("Can't open X display. It *is* running, yeah?");
 
-   imlib_context_set_display(disp);
-   imlib_context_set_visual(vis);
-   imlib_context_set_colormap(cm);
-   imlib_context_set_color_modifier(NULL);
-   imlib_context_set_operation(IMLIB_OP_COPY);
+	screen_num = (screen_num ? screen_num : DefaultScreen(disp));
+	screen = ScreenOfDisplay(disp, screen_num);
+
+	vis = DefaultVisual(disp, XScreenNumberOfScreen(screen));
+	depth = DefaultDepth(disp, XScreenNumberOfScreen(screen));
+	cm = DefaultColormap(disp, XScreenNumberOfScreen(screen));
+	root = RootWindow(disp, XScreenNumberOfScreen(screen));
+
+	imlib_context_set_display(disp);
+	imlib_context_set_visual(vis);
+	imlib_context_set_colormap(cm);
+	imlib_context_set_color_modifier(NULL);
+	imlib_context_set_operation(IMLIB_OP_COPY);
 }

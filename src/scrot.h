@@ -109,6 +109,6 @@ extern int depth;
 
 /* Thumbnail sizes */
 extern Window root;
-extern Screen *scr;
+extern Screen *screen;
 
 #endif
