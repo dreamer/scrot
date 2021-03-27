@@ -690,6 +690,7 @@ im_printf(char *str, struct tm *tm,
   char ret[4096];
   char strf[4096];
   char *tmp;
+  size_t n;
   struct stat st;
 
   ret[0] = '\0';
@@ -766,8 +767,14 @@ im_printf(char *str, struct tm *tm,
           strncat(ret, c, 1);
           break;
       }
-    } else
-      strncat(ret, c, 1);
+    } else {
+      // append a single char
+      n = strlen(ret);
+      if (n >= sizeof(ret) - 1)
+        break;
+      ret[n] = c[0];
+      ret[n+1] = '\0';
+    }
   }
   return gib_estrdup(ret);
 }
