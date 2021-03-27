@@ -64,17 +64,17 @@ gib_weprintf(char *fmt, ...)
 }
 
 /* estrdup: duplicate a string, report if error */
-char *
-_gib_estrdup(char *s)
+char *_gib_estrdup(char *s)
 {
-   char *t;
-   if(!s)
-      return NULL;
-   t = (char *) malloc(strlen(s) + 1);
-   if (t == NULL)
-      gib_eprintf("estrdup(\"%.20s\") failed:", s);
-   strcpy(t, s);
-   return t;
+	char *t = NULL;
+	if (!s)
+		return NULL;
+	t = (char *) malloc(strlen(s) + 1);
+	if (t == NULL)
+		gib_eprintf("estrdup(\"%.20s\") failed:", s);
+	else
+		strcpy(t, s);
+	return t;
 }
 
 /* emalloc: malloc and report if error */
