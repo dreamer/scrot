@@ -3,7 +3,8 @@ name: Build
 on: [push, pull_request]
 
 jobs:
-  build_ubuntu:
+
+  build:
     name: Verify compilation
     runs-on: ubuntu-20.04
     steps:
@@ -12,3 +13,13 @@ jobs:
       - run: sudo apt-get install -y meson libimlib2-dev libxfixes-dev
       - run: meson setup -Dwarning_level=3 build
       - run: ninja -C build
+
+  static_analysis:
+    name: Run static analysis
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y meson libimlib2-dev libxfixes-dev clang-tools
+      - run: meson setup build
+      - run: ninja -C build scan-build
