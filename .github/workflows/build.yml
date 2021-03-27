@@ -22,4 +22,4 @@ jobs:
       - run: sudo apt-get update
       - run: sudo apt-get install -y meson libimlib2-dev libxfixes-dev clang-tools
       - run: meson setup build
-      - run: ninja -C build scan-build
+      - run: SCANBUILD="$(pwd)/contrib/scan-build.sh" ninja -C build scan-build
