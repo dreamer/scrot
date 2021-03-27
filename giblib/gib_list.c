@@ -188,37 +188,6 @@ gib_list_add_at_pos(gib_list * root, int pos, void *data)
    return (root);
 }
 
-gib_list *
-gib_list_move_up_by_one(gib_list * root, gib_list * l)
-{
-   if (l || l->prev)
-      root = gib_list_move_down_by_one(root, l->prev);
-   return (root);
-}
-
-gib_list *
-gib_list_move_down_by_one(gib_list * root, gib_list * l)
-{
-   gib_list *temp;
-
-   if (!l || !l->next)
-      return (root);
-
-   /* store item we link next to */
-   temp = l->next;
-   /* remove from list */
-   root = gib_list_unlink(root, l);
-   /* add back one before */
-   l->next = temp->next;
-   l->prev = temp;
-   if (temp->next)
-      temp->next->prev = l;
-   temp->next = l;
-
-   return (root);
-}
-
-
 unsigned char
 gib_list_has_more_than_one_item(gib_list * root)
 {
