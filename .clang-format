@@ -1,0 +1,76 @@
+# This style definition should only be understood as a hint
+# for writing new code.
+
+# This file uses configuration options available in clang-format 10.0.
+#
+# More detailed description of all options:
+# https://releases.llvm.org/10.0.0/tools/clang/docs/ClangFormatStyleOptions.html
+
+# Use tabs, but only for indentation (lining up blocks of code).
+# Use space for indenting continuations (lining up long statements broken
+# into several lines.
+#
+UseTab: ForIndentation
+TabWidth: 8
+IndentWidth: 8
+ContinuationIndentWidth: 8
+ColumnLimit: 80
+
+# clang-format does not know plain C...
+Language: Cpp
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterControlStatement: false
+  AfterEnum: false
+  AfterFunction: true
+  AfterStruct: false
+  AfterUnion: false
+  AfterExternBlock: false
+  BeforeCatch: false
+  BeforeElse: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+
+AlignAfterOpenBracket: Align
+
+AlignConsecutiveMacros: true
+
+AlignEscapedNewlines: DontAlign
+
+AllowAllParametersOfDeclarationOnNextLine: false
+
+AllowShortCaseLabelsOnASingleLine: false
+
+AllowShortFunctionsOnASingleLine: InlineOnly
+
+#AlwaysBreakAfterReturnType: AllDefinitions
+
+BinPackParameters: false
+
+BreakStringLiterals: false
+
+IndentCaseLabels: true
+
+KeepEmptyLinesAtTheStartOfBlocks: false
+
+MaxEmptyLinesToKeep: 1
+
+PenaltyBreakAssignment: 100
+PenaltyBreakBeforeFirstCallParameter: 100
+PenaltyBreakComment: 10
+PenaltyBreakString: 110
+PenaltyExcessCharacter: 20
+PenaltyReturnTypeOnItsOwnLine: 0
+
+SortIncludes: false
+
+SpaceAfterCStyleCast: true
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeParens: ControlStatements
+SpaceInEmptyParentheses: false
+
+SpacesBeforeTrailingComments: 1
+SpacesInCStyleCastParentheses: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
