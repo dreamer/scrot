@@ -56,6 +56,8 @@ typedef struct __scrotoptions scrotoptions;
 void init_parse_options(int argc, char **argv);
 char *name_thumbnail(char *name);
 void options_parse_thumbnail(char *optarg);
-extern scrotoptions opt;
+extern scrotoptions scrot_options;
+
+#define opt (scrot_options)
 
 #endif

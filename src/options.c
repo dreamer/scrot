@@ -30,7 +30,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "options.h"
 
 static void scrot_parse_option_array(int argc, char **argv);
-scrotoptions opt;
+scrotoptions scrot_options;
 
 void
 init_parse_options(int argc, char **argv)
