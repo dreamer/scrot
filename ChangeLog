@@ -1,17 +1,28 @@
-## Unreleased
+## [Unreleased]
 
-- Add -z, --silent option for beep prevention (old Debian patch)
-- Add -p, --pointer option for capturing the mouse pointer
-- Fix segfault when using $t special string in the filename
-- Use .png extension when no file extension is passed
-- Fix several static analysis issues and add Clang static analysis to CI
-- Add SPDX license identifiers (this software uses MIT-feh license)
+## [0.10.0] - 2021-03-29
 
-Tue 23 Mar 04:26:49 CET 2021  Patryk Obara <dreamer.tan@gmail.com>
-  * Bundle giblib to make it easier to build the program.
-  * Rewrite buildsystem in Meson, as it's much easier to maintain.
-  * Add rudimentary GitHub CI.
-  * Fix several warnings.
+### Added
+- Add -z, --silent option for beep prevention (old Debian patch).
+- Add -p, --pointer option for capturing the mouse pointer.
+- Add SPDX license identifiers (this software uses MIT-feh license).
+- Add Clang static analysis to CI.
+
+### Changed
+- Fix segfault when using $t special string in the filename.
+- Use .png extension when no file extension is passed.
+- Fix several static analysis issues and add Clang static analysis to CI.
+- Start relicensing new changes to OSI-approved MIT license.
+
+## [0.9.0] - 2021-03-23
+
+### Added
+- Add rudimentary GitHub CI.
+- Bundle giblib to make it easier to build the program.
+
+### Changed
+- Rewrite buildsystem in Meson, as it's much easier to maintain.
+- Fix several warnings.
 
 Sun Aug 15 22:48:11 GMT 2010  Patryk Obara <patryk.obara@gmail.com>
   * Anonymous patches from Debian: man fixes and -u, --focused
@@ -144,3 +155,6 @@ Thu Oct 26 14:09:52 2000  Tom Gilbert  <gilbertt@linuxbrit.co.uk>
 
 	* Created scrot.
 
+[Unreleased]: https://github.com/dreamer/scrot/compare/v0.10.0...HEAD
+[0.10.0]:     https://github.com/dreamer/scrot/compare/v0.9.0...v0.10.0
+[0.9.0]:      https://github.com/dreamer/scrot/compare/scrot-0.8...v0.9.0
