@@ -1,5 +1,5 @@
 Name:    scrot
-Version: 0.9.0
+Version: 0.10.0
 Release: 1%{?dist}
 Summary: Simple command-line screenshot utility for X
 License: MIT-feh
@@ -13,7 +13,7 @@ BuildRequires: libX11-devel
 
 %description
 A nice and straightforward screen capture utility implementing the dynamic
-loaders of imlib2.
+loaders of Imlib2.
 
 %prep
 %autosetup
@@ -27,11 +27,15 @@ loaders of imlib2.
 
 %files
 %license COPYING
-%doc AUTHORS ChangeLog
+%doc AUTHORS README.md ChangeLog
 %{_bindir}/*
 %{_mandir}/man1/*
 
 %changelog
+* Sun Mar 29 2021 Patryk Obara (pbo) <dreamer.tan@gmail.com>
+- 0.10.0-1
+- Update to 0.10.0
+
 * Tue Mar 23 2021 Patryk Obara (pbo) <dreamer.tan@gmail.com>
 - 0.9.0-1
 - Rewrite the spec file for new buildsystem and modern rpm
