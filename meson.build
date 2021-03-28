@@ -48,4 +48,7 @@ executable('scrot', scrot_src,
 data_dir = get_option('datadir')
 
 install_man('scrot.1')
-install_data('COPYING', install_dir : data_dir / 'licenses' / 'scrot')
+install_data('COPYING',   install_dir : data_dir / 'licenses' / 'scrot')
+install_data('AUTHORS',   install_dir : data_dir / 'doc' / 'scrot')
+install_data('README.md', install_dir : data_dir / 'doc' / 'scrot')
+install_data('ChangeLog', install_dir : data_dir / 'doc' / 'scrot')
